@@ -45,9 +45,26 @@ function displayList(listHTML) {
 function createList(responseJson) {
     let listHTML = "";
     for (let i=0; i < responseJson.data.length; i++) {
-        listHTML += `<li><h4>${responseJson.data[i].fullName}</h4><ul><li>${responseJson.data[i].description}</li><li><a href="${responseJson.data[i].url}">Website</a></li><li>Address Placeholder</li></ul></li>`;
+        let addressObject = findAddress(responseJson.data[i]);
+        listHTML += `<li><h4>${responseJson.data[i].fullName}</h4><ul><li>${responseJson.data[i].description}</li><br><li><a href="${responseJson.data[i].url}">Website</a></li><li><h5>Physical Address</h5><ul><li>${addressObject.line1}<br>`;
+        if (addressObject.line2.length > 0) {
+            listHTML += `${addressObject.line2}<br>`
+        }
+        if (addressObject.line3.length > 0) {
+            listHTML += `${addressObject.line3}<br>`
+        }
+        listHTML += `${addressObject.city}, ${addressObject.stateCode} ${addressObject.postalCode}</li></ul></ul></li>`
     }
     displayList(listHTML);
+}
+
+function findAddress(object) {
+    for (let i=0; i < object.addresses.length; i++) {
+        if (object.addresses[i].type === 'Physical') {
+            return object.addresses[i];
+        }
+    }
+    return null;
 }
 
 function watchForm() {

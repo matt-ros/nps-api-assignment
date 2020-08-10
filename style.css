@@ -14,3 +14,7 @@ body {
 input {
     margin: 2px
 }
+
+ul {
+    list-style-type: none;
+}
